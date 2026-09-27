@@ -1,0 +1,13 @@
+Concepto,Medida,Valor
+Entropía,H(zona origen) global,3.992 bits (15.9 zonas efectivas de 20)
+Entropía,H(zona) franja más concentrada,3.869 bits (madrugada)
+Entropía,H(zona) franja más dispersa,3.968 bits (pico_am)
+Entropía condicional,H(destino | origen),3.753 bits (vs. 4.130 sin información)
+Información mutua,I(zona origen; destino),0.377 bits
+Información mutua,I(hora; destino),0.0717 bits (azar: 0.0063; p < 0.002)
+KL,"KL(finde || laboral), hora",0.188 bits
+KL,"KL(finde || laboral), zona",0.050 bits
+KL,Hora más distinta del mapa promedio,3:00 (0.471 bits)
+Entropía cruzada,"H(P_finde, Q_laboral), zona×hora",8.669 bits vs. H(P_finde) = 8.415
+Jensen,Brecha E[log X] vs. log E[X],0.254 bits = KL
+Log-sum-exp,Clasificación de días por sus viajes,97.8 % de 182 días

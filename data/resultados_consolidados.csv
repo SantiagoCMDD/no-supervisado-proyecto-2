@@ -1,0 +1,25 @@
+Rol,Bloque,Medida,Valor
+Rol 1,Entropía,H(zona origen) global,3.992 bits (15.9 zonas efectivas de 20)
+Rol 1,Entropía,H(zona) franja más concentrada,3.869 bits (madrugada)
+Rol 1,Entropía,H(zona) franja más dispersa,3.968 bits (pico_am)
+Rol 1,Entropía condicional,H(destino | origen),3.753 bits (vs. 4.130 sin información)
+Rol 1,Información mutua,I(zona origen; destino),0.377 bits
+Rol 1,Información mutua,I(hora; destino),0.0717 bits (azar: 0.0063; p < 0.002)
+Rol 1,KL,"KL(finde || laboral), hora",0.188 bits
+Rol 1,KL,"KL(finde || laboral), zona",0.050 bits
+Rol 1,KL,Hora más distinta del mapa promedio,3:00 (0.471 bits)
+Rol 1,Entropía cruzada,"H(P_finde, Q_laboral), zona×hora",8.669 bits vs. H(P_finde) = 8.415
+Rol 1,Jensen,Brecha E[log X] vs. log E[X],0.254 bits = KL
+Rol 1,Log-sum-exp,Clasificación de días por sus viajes,97.8 % de 182 días
+Rol 2,K-means,K elegido,4 (silueta 0.232)
+Rol 2,K-means,Criterio de selección,Codo de inercia y máximo de silueta entre K = 2 y 10
+Rol 2,Ward,Coincidencia con K-means,ARI = 0.358 sobre 5 000 viajes
+Rol 2,DBSCAN,Parámetros,"eps = 0.439 (codo de k-distancia), min_samples = 10"
+Rol 2,DBSCAN,Clusters y ruido,"2 clusters, 1.68 % de ruido"
+Rol 3,GMM,K seleccionado,4 perfiles (BIC monótono; máxima estabilidad entre mitades)
+Rol 3,EM,Convergencia,46 iteraciones con tolerancia 1e-6 por viaje
+Rol 3,EM,Log-verosimilitud final,"-194,973.2"
+Rol 3,EM,Validación contra sklearn,diferencia relativa 1.3e-07
+Rol 3,Inicialización,kmeans++ vs aleatoria,66.0 vs 108.2 iteraciones promedio
+Rol 3,Responsabilidades,Asignaciones ambiguas,1.8 % con responsabilidad < 0.6
+Rol 3,Comparación,ARI con K-means del Rol 2,0.375

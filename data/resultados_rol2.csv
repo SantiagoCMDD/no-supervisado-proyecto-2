@@ -1,0 +1,6 @@
+Método,Medida,Valor
+K-means,K elegido,4 (silueta 0.232)
+K-means,Criterio de selección,Codo de inercia y máximo de silueta entre K = 2 y 10
+Ward,Coincidencia con K-means,ARI = 0.358 sobre 5 000 viajes
+DBSCAN,Parámetros,"eps = 0.439 (codo de k-distancia), min_samples = 10"
+DBSCAN,Clusters y ruido,"2 clusters, 1.68 % de ruido"

@@ -1,0 +1,8 @@
+Bloque,Medida,Valor
+GMM,K seleccionado,4 perfiles (BIC monótono; máxima estabilidad entre mitades)
+EM,Convergencia,46 iteraciones con tolerancia 1e-6 por viaje
+EM,Log-verosimilitud final,"-194,973.2"
+EM,Validación contra sklearn,diferencia relativa 1.3e-07
+Inicialización,kmeans++ vs aleatoria,66.0 vs 108.2 iteraciones promedio
+Responsabilidades,Asignaciones ambiguas,1.8 % con responsabilidad < 0.6
+Comparación,ARI con K-means del Rol 2,0.375

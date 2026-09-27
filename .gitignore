@@ -1,0 +1,14 @@
+data/train.csv
+data/test.csv
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Entornos
+.venv/
+venv/
+env/
