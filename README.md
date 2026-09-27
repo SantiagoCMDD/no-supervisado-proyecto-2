@@ -25,7 +25,7 @@ https://www.kaggle.com/c/nyc-taxi-trip-duration
 - **1,458,644** viajes originales · 11 columnas (coordenadas de recogida/destino, timestamps, pasajeros, proveedor)
 - Limpieza con reglas explícitas (`data/registro_limpieza.csv`): coordenadas fuera de NYC, duración fuera de 60 s–3 h, pasajeros fuera de 1–6, distancia < 0.1 km, velocidad > 100 km/h → **1,439,504 viajes restantes** (1.31 % eliminado)
 - Zonificación geográfica en **20 zonas** (`data/centroides_zonas.csv`) mediante clustering de coordenadas
-- Muestra de **50,000 viajes** (`data/muestra_50k.csv`) usada en los Roles 2 y 3 por el costo computacional de DBSCAN y EM sobre el dataset completo
+- Muestra de **50,000 viajes** (`data/muestra_50k.csv`) usada por los cuatro roles: el Rol 1 calcula todas sus entropías sobre ella, y es la base común de los Roles 2, 3 y 4, por el costo computacional de DBSCAN y EM sobre el dataset completo
 
 > **`train.csv` (192 MB) y `test.csv` (68 MB) no están incluidos en este repositorio** por exceder el límite de 100 MB de GitHub. Para reproducir el pipeline desde cero, descárgalos de Kaggle y colócalos en `data/`.
 
@@ -45,7 +45,7 @@ https://www.kaggle.com/c/nyc-taxi-trip-duration
 
 ### 1. El origen predice el destino; la hora casi no aporta
 
-La información mutua entre zona de origen y destino es **0.377 bits**, mientras que entre hora y destino es apenas **0.0717 bits** — muy cerca del nivel de azar estimado por permutación (0.0063 bits, p < 0.002, pero de una magnitud muy distinta). Saber de dónde sale un viaje reduce mucho más la incertidumbre sobre a dónde va que saber a qué hora ocurre.
+La información mutua entre zona de origen y destino es **0.377 bits**, mientras que entre hora y destino es apenas **0.0717 bits, once veces el nivel de azar estimado por permutación (0.0063 bits, p < 0.002), pero pequeño en magnitud frente a los 0.377 bits del origen**. Saber de dónde sale un viaje reduce mucho más la incertidumbre sobre a dónde va que saber a qué hora ocurre.
 
 ### 2. Fin de semana y entre semana difieren en el cuándo, no en el dónde
 
@@ -55,9 +55,9 @@ La divergencia KL entre la distribución de fin de semana y la de días laborale
 
 | Método | Resultado |
 |---|---|
-| K-means | K = 4 (silueta 0.232), elegido por codo de inercia + máximo de silueta |
+| K-means | K = 4, elegido por codo de inercia y mínimo local de Davies-Bouldin (la silueta prefería K = 2, pero con valor bajo ~0.27 y sin separar más que viajes cortos de largos) |
 | Ward (jerárquico) | ARI = 0.358 frente a K-means, sobre 5,000 viajes |
-| DBSCAN | eps = 0.439 (codo de k-distancia), solo 2 clusters con 1.68 % de ruido |
+| DBSCAN | eps = 0.439 (codo de k-distancia), solo 2 clusters con 1.69 % de ruido |
 
 DBSCAN no reproduce los 4 segmentos: el espacio de características no tiene la estructura de densidad que ese algoritmo necesita, evidencia de que las diferencias entre grupos son graduales, no huecos de densidad.
 
@@ -76,7 +76,7 @@ El GMM selecciona **4 perfiles** (BIC monótono, máxima estabilidad entre mitad
 
 ## Recomendaciones de negocio (Rol 4)
 
-1. **Reposicionamiento nocturno** de flota hacia las zonas con mayor densidad de viajes largos.
+1. **Reposicionamiento nocturno**: entre la 1:00 y las 3:00 am la demanda deja de repartirse uniformemente y se concentra en las zonas 6, 7 y 9 —de viajes cortos nocturnos—, que cubren el 42.6 % de esa ventana frente al 29.4 % de las tres mejores zonas de día.
 2. **Calendario operativo por patrón**, ajustando turnos a la curva horaria de cada perfil en vez de a promedios agregados.
 3. **Estimación de tiempos por franja y zona**, usando los perfiles de duración/velocidad como base en vez de un tiempo promedio único.
 4. **Tratamiento diferenciado de viajes atípicos**, separando el ruido operativo de la señal real de demanda.
@@ -87,9 +87,9 @@ Detalle completo y evidencia numérica en [`04_rol4_negocio.ipynb`](notebooks/04
 
 ## Limitaciones
 
-- Los Roles 2 y 3 trabajan sobre una muestra de 50,000 viajes, no el dataset completo, por el costo computacional de DBSCAN y EM.
+- Los cuatro roles trabajan sobre una muestra de 50,000 viajes, no el dataset completo, por el costo computacional de DBSCAN y EM.
 - Ward se validó solo sobre 5,000 viajes por la complejidad O(n²) del clustering jerárquico aglomerativo.
-- El ARI moderado entre K-means y GMM (0.358–0.375) refleja que ambos métodos son razonables pero no hay una partición única "correcta": los segmentos son continuos, no discretos por naturaleza.
+- El acuerdo moderado entre los tres métodos —ARI de 0.358 entre Ward y K-means, y de 0.375 entre GMM y K-means— refleja que son razonables pero no hay una partición única "correcta": los segmentos son continuos, no discretos por naturaleza.
 
 ## Estructura del repositorio
 
@@ -97,7 +97,7 @@ Detalle completo y evidencia numérica en [`04_rol4_negocio.ipynb`](notebooks/04
 ├── data/
 │   ├── train.csv                      # NO incluido (192 MB) — descargar de Kaggle
 │   ├── test.csv                       # NO incluido (68 MB) — descargar de Kaggle
-│   ├── muestra_50k.csv                # muestra usada en Roles 2 y 3
+│   ├── muestra_50k.csv                # muestra común usada por los cuatro roles
 │   ├── sample_submission.csv
 │   ├── registro_limpieza.csv          # reglas de limpieza y registros eliminados
 │   ├── centroides_zonas.csv           # centroides de las 20 zonas geográficas
